@@ -19,3 +19,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.card{
+  background-color: #143d70;
+  box-shadow: rgba(255, 255, 255, 0.9) 0px 0px 4px, rgba(255, 255, 255, 0.6) 0px 0px 4px;
+  padding: 1rem;
+  border-radius: 3px;
+}
+
