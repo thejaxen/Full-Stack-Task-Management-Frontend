@@ -1,13 +1,14 @@
+import React from 'react';
 import Sidebar from "../sidebar/Sidebar";
 import TaskList from "../tasklist/TaskList";
 
 const Home = () => {
     return (
-        <div className='lg:flex px-5 lg:px-20 pt-[2.9vh]'>
-            <div className='hidden lg:block w-[25vh] relative'>
+        <div className='lg:flex px-5 lg:px-20 pt-[2.9vh] min-h-screen'>
+            <div className='hidden lg:flex w-[20vw]'>
                 <Sidebar/>
             </div>
-            <div className='right-side-part w-full flex justify-center mb-10'>
+            <div className='flex-1 flex justify-center'>
                 <TaskList/>
             </div>
         </div>
