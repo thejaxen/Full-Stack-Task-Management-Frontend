@@ -27,3 +27,9 @@ code {
   border-radius: 3px;
 }
 
+.techStack{
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  padding: 0.5rem 2rem;
+}
+

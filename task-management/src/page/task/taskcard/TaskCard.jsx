@@ -1,14 +1,61 @@
-import React from 'react'
+import React,{useState} from 'react'
+import Logo from './../../../logo.svg'
+import {IconButton, Menu, MenuItem} from "@mui/material";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import UserList from "../UserList";
+import SubmissionList from "../SubmissionList";
+import EditTaskCard from "../EditTaskCard";
+
+const role="ROLE_ADMIN"
 
 const TaskCard = () => {
+
+    const [anchorEl,setAnchorEl] = React.useState(null);
+
+    const openMenu = Boolean(anchorEl);
+
+    const handleMenuClick = (event)=>{
+        setAnchorEl(event.currentTarget);};
+
+    const handleMenuClose=()=>{
+        setAnchorEl(null);};
+
+    const handleOpenUserList=()=>{
+        setOpenUserList(true);
+        handleMenuClose()
+    };
+    const handleOpenSubmissionList=()=>{
+        setOpenSubmissionList(true);
+        handleMenuClose();
+    };
+
+    const handleOpenUpdateTaskModel=()=>{
+        setOpenUpdateTaskForm(true);
+        handleMenuClose();
+    };
+
+    const handleDeleteTask=()=>{};
+
+    const[openUserList,setOpenUserList] = useState(false);
+
+    const handleCloseUserList=()=>{setOpenUserList(false)}
+
+    const[openSubmissionList,setOpenSubmissionList] = useState(false);
+
+    const handleCloseSubmissionList=()=>{setOpenSubmissionList(false)}
+
+    const[openUpdateTaskForm,setOpenUpdateTaskForm] = useState(false);
+
+    const handleCloseUpdateTaskForm=()=>{setOpenUpdateTaskForm(false)}
+
     return(
         <div>
             <div className='card lg:flex justify-between'>
                 <div className='lg:flex gap-5 items-center space-y-2 w-[90%] lg:w-[70%]'>
                     <div className=''>
-                        <img className='lg:w-[7ren] lg:h-[rem] object-cover'
-                             src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Ftr%2Fstok-foto%25C4%259Fraflar%2Fdo%25C4%259Fa-ve-manzaralar&psig=AOvVaw00vF3s4AtLkyFN-6ag3kYe&ust=1739993181026000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCNCMiO75zYsDFQAAAAAdAAAAABAE"
-                             alt=""/>
+                        <img className='lg:w-[7rem] lg:h-[rem] object-cover'
+                             src={Logo}
+                             alt="Logo"/>
                     </div>
                     <div className='space-y-5'>
                         <div className='space-y-2'>
@@ -22,9 +69,41 @@ const TaskCard = () => {
                         </div>
                     </div>
                 </div>
+                <div>
+                    <IconButton
+                        id="basic-buttom"
+                        aria-controls={openMenu ? 'basic menu' :undefined}
+                        aria-haspopup="true"
+                        aria-expanded={openMenu ? 'true' : undefined}
+                        onClick={handleMenuClick}>
+                        <MoreVertIcon/>
+                    </IconButton>
+
+                    <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={openMenu}
+                    onClose={handleMenuClose}
+                    MenuListProps={{
+                        'aria-labelledby':'basic-button',
+                    }}>
+                        {
+                            role==="ROLE_ADMIN"?<>
+                            <MenuItem onClick={handleOpenUserList}>Assigned User</MenuItem>
+                            <MenuItem onClick={handleOpenSubmissionList}>See Submissions</MenuItem>
+                                <MenuItem onClick={handleOpenUpdateTaskModel}>Edit</MenuItem>
+                                <MenuItem onClick={handleDeleteTask}>Delete</MenuItem>
+                            </>:<>
+                            </>
+                        }
+                    </Menu>
+                </div>
             </div>
+            <UserList open={openUserList} handleClose={handleCloseUserList}/>
+            <SubmissionList open={openSubmissionList} handleClose={handleCloseSubmissionList}/>
+            <EditTaskCard open={openUpdateTaskForm} handleClose={handleCloseUpdateTaskForm}/>
         </div>
     )
 }
 
-export default TaskCard
+export default TaskCard;
