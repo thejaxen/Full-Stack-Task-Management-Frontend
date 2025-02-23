@@ -34,8 +34,6 @@ const TaskCard = () => {
         handleMenuClose();
     };
 
-    const handleDeleteTask=()=>{};
-
     const[openUserList,setOpenUserList] = useState(false);
 
     const handleCloseUserList=()=>{setOpenUserList(false)}
@@ -47,6 +45,8 @@ const TaskCard = () => {
     const[openUpdateTaskForm,setOpenUpdateTaskForm] = useState(false);
 
     const handleCloseUpdateTaskForm=()=>{setOpenUpdateTaskForm(false)}
+
+    const handleDeleteTask=()=>{handleMenuClose()};
 
     return(
         <div>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {Avatar, Button} from "@mui/material";
 import "./Sidebar.css";
+import CreateNewTaskForm from "../task/CreateNewTaskForm";
 
 const menu = [
     { name: "Home", value: "HOME", role: ["ROLE_ADMIN", "ROLE_USER"] },
@@ -15,7 +16,17 @@ const role = "ROLE_ADMIN";
 
 export const Sidebar = () => {
     const [activeMenu, setActiveMenu] = useState("Home");
+    const[openCreateTaskForm,setOpenCreateTaskForm] = useState(false);
+    const handleCloseCreateTaskForm=()=>{
+        setOpenCreateTaskForm(false);}
+    const handleOpenCreateTaskModel=()=>{
+        setOpenCreateTaskForm(true);};
+
     const handleMenuChange=(item)=>{
+
+        if(item.name==="Create New Task"){
+           handleOpenCreateTaskModel()
+        }
         setActiveMenu(item.name)
     }
     const handleLogout =()=>{
@@ -23,38 +34,39 @@ export const Sidebar = () => {
     }
 
     return (
-        <div className="card min-h-[85vh] flex flex-col justify-center fixed w-[20vw]">
-            <div className="space-y-5">
-                {/* Avatar */}
-                <div className="flex justify-center">
-                    <Avatar
-                        sx={{ width: "8rem", height: "8rem" }}
-                        className="border-2 border-[#143D70]"
-                    >
-                        C
-                    </Avatar>
-                </div>
-
-
-                {menu
-                    .filter((item) => item.role.includes(role))
-                    .map((item) => (
-                        <p
-                            onClick={()=>handleMenuChange(item)}
-                            key={item.value}
-                            className={`py-3 px-5 rounded-full text-center cursor-pointer ${
-                                activeMenu === item.name ? "activeMenuItem" : "menuItem"
-                            }`}
+        <>
+            <div className="card min-h-[85vh] flex flex-col justify-center fixed w-[20vw]">
+                <div className="space-y-5">
+                    {/* Avatar */}
+                    <div className="flex justify-center">
+                        <Avatar
+                            sx={{width: "8rem", height: "8rem"}}
+                            className="border-2 border-[#143D70]"
                         >
-                            {item.name}
-                        </p>
-                    ))}
-                <Button onClick={handleLogout
-                } sx={{padding:".7rem",borderRadius:"2rem"}} fullWidth className='logoutButton'>
-                    Logout
-                </Button>
+                            C
+                        </Avatar>
+                    </div>
+                    {menu
+                        .filter((item) => item.role.includes(role))
+                        .map((item) => (
+                            <p
+                                onClick={() => handleMenuChange(item)}
+                                key={item.value}
+                                className={`py-3 px-5 rounded-full text-center cursor-pointer ${
+                                    activeMenu === item.name ? "activeMenuItem" : "menuItem"
+                                }`}
+                            >
+                                {item.name}
+                            </p>
+                        ))}
+                    <Button onClick={handleLogout} sx={{padding: ".7rem", borderRadius: "2rem"}} fullWidth
+                            className='logoutButton'>
+                        Logout
+                    </Button>
+                </div>
             </div>
-        </div>
+            <CreateNewTaskForm open={openCreateTaskForm} handleClose={handleCloseCreateTaskForm}/>
+        </>
     );
 };
 
