@@ -33,3 +33,8 @@ code {
   padding: 0.5rem 2rem;
 }
 
+.customButton{
+  background-image: linear-gradient(150deg,#282c34,#4169e1);
+  color: white !important;
+}
+
