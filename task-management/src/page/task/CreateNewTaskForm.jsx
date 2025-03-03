@@ -8,6 +8,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import Typography from "@mui/material/Typography";
+import {Button} from "@mui/material";
 
 const style = {
     position: 'absolute',
@@ -24,6 +25,31 @@ const style = {
 const tags =["Arge","Fırın","Bakım","Üretim","Kompozit","Depo","Kalite","Poligon","Taşlama","Kesim","İdari Bina Alt Kat","İdari Bina Üst Kat"]
 
 export default function CreateNewTaskForm({handleClose,open}){
+
+    const handleDeadlineChange=(date)=>{
+        setFormData({
+            ...formData,
+            deadline:date
+        })
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        let { deadline } = formData;
+        console.log("Raw deadline value before formatting:", deadline);
+        if (typeof deadline === "string") {
+            console.log("Deadline is already formatted:", deadline);
+            formData.deadline = deadline;
+        } else {
+            formData.deadline = formatedDate(deadline);
+        }
+        if (!formData.deadline) {
+            console.error("Invalid formatted deadline!");
+            return;
+        }
+        console.log("Final formatted deadline:", formData.deadline);
+        handleClose();
+    };
 
     const [formData,setFormData]=useState({
         title:"",
@@ -48,6 +74,24 @@ export default function CreateNewTaskForm({handleClose,open}){
         setSelectedTags(value);
     }
 
+    const formatedDate=(input)=>{
+        let{
+            $y: year,
+            $M: month,
+            $D: day,
+            $H: hours,
+            $m: minutes,
+            $s: seconds,
+            $ms: miliseconds,
+        } = input;
+
+        const date = new Date(year,month,day,hours,minutes,seconds,miliseconds)
+
+        const formatedDate = date.toISOString();
+
+        return formatedDate;
+    }
+
     return(
         <div>
             <Modal
@@ -60,7 +104,7 @@ export default function CreateNewTaskForm({handleClose,open}){
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Create New Task
                     </Typography>
-                   <form>
+                   <form onSubmit={handleSubmit}>
                        <Grid container spacing={2} alignItems="center">
                             <Grid item xs={12}>
                                 <TextField
@@ -123,6 +167,15 @@ export default function CreateNewTaskForm({handleClose,open}){
                                        renderInput={(params) => <TextField {...params} fullWidth />}
                                    />
                                </LocalizationProvider>
+                           </Grid>
+                           <Grid item xs={12}>
+                               <Button
+                                   fullWidth
+                                    className="customButton"
+                                    type="submit"
+                                    sx={{padding:".9rem"}}>
+                                   Create
+                               </Button>
                            </Grid>
                        </Grid>
                    </form>
