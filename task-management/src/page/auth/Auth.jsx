@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Logo from "./../../logo.svg";
 import "./Auth.css";
 import SignIn from "./SignIn";
+import SignUp from "./SignUp";
 
 
 const Auth = () => {
@@ -27,12 +28,11 @@ const Auth = () => {
                 <div className="forms h-full">
                     <div className="form-content h-full">
                         <div className="login-form">
-                            <SignIn/>
+                            <SignIn togglePanel={togglePanel}/>
                         </div>
                         <div className="signup-form">
-                            signup form
+                            <SignUp togglePanel={togglePanel}/>
                         </div>
-                        
                     </div>
                 </div>
             </div>

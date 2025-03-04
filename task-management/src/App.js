@@ -5,8 +5,6 @@ import Home from "./page/home/Home";
 import Auth from "./page/auth/Auth";
 
 
-
-
 function App() {
   return (
     <ThemeProvider theme={darkTheme}>
