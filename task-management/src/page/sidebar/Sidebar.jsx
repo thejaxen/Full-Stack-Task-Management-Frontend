@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {Avatar, Button} from "@mui/material";
 import "./Sidebar.css";
 import CreateNewTaskForm from "../task/CreateNewTaskForm";
+import {useLocation} from "react-router-dom";
 
 const menu = [
     { name: "Home", value: "HOME", role: ["ROLE_ADMIN", "ROLE_USER"] },
@@ -15,6 +16,9 @@ const menu = [
 const role = "ROLE_ADMIN";
 
 export const Sidebar = () => {
+
+    const location = useLocation();
+
     const [activeMenu, setActiveMenu] = useState("Home");
     const[openCreateTaskForm,setOpenCreateTaskForm] = useState(false);
     const handleCloseCreateTaskForm=()=>{
