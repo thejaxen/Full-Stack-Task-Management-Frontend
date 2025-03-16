@@ -17,7 +17,6 @@ function App() {
             <Home/>
         </div>: <Auth/>}
 
-
     </ThemeProvider>
   );
 }

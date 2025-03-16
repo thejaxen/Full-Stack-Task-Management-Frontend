@@ -2,11 +2,11 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {api, setAuthHeader} from "../api/api";
 
 export const submitTask=createAsyncThunk("submissions/submitTask",
-    async({taskId,githubLink})=>{
+    async({taskId,comment})=>{
         setAuthHeader(localStorage.getItem("jwt",api))
 
         try{
-            const {data}=await api.post(`/api/submissions?task_id=${taskId}&github_link=${githubLink}`,
+            const {data}=await api.post(`/api/submission/submit?task_id=${taskId}&comment=${comment}`,
                 {}
             );
             console.log("submitted task",data)
@@ -20,13 +20,13 @@ export const submitTask=createAsyncThunk("submissions/submitTask",
 
 export const fetchAllSubmissions=createAsyncThunk("submissions/fetchAllSubmissions",
     async()=>{
-        setAuthHeader(localStorage.getItem("jwt",api))
+        setAuthHeader(localStorage.getItem("jwt",api));
 
         try{
-            const {data}=await api.get(`/api/submissions`,
+            const {data}=await api.get(`/api/submission/get-all-submissions`,
                 {}
             );
-            console.log("submitted tasks",data)
+            console.log("all fetched tasks",data)
             return data;
         }catch(error){
             console.log("catch ",error)
@@ -40,7 +40,7 @@ export const fetchSubmissionsByTaskId=createAsyncThunk("submissions/fetchSubmiss
         setAuthHeader(localStorage.getItem("jwt",api))
 
         try{
-            const {data}=await api.get(`/api/submissions/task/${taskId}`,
+            const {data}=await api.get(`/api/submission/task/${taskId}`,
                 {}
             );
             console.log("submitted tasks",data)

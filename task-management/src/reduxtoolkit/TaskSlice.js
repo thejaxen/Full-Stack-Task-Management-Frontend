@@ -5,7 +5,7 @@ export const fetchTasks=createAsyncThunk("task/fetchTasks",
     async({status})=>{
     setAuthHeader(localStorage.getItem("jwt"),api)
        try{
-            const {data}=await api.get("/api/tasks",{
+            const {data}=await api.get("/api/tasks/all-tasks",{
                 params:{status}
             });
             console.log("fetch tasks: ",data)
@@ -34,7 +34,7 @@ export const fetchUsersTasks=createAsyncThunk("task/fetchUsersTasks",
 );
 
 export const fetchTasksById=createAsyncThunk("task/fetchTasksById",
-    async({task_id})=>{
+    async(task_id)=>{
         setAuthHeader(localStorage.getItem("jwt"),api)
         try{
             const {data}=await api.get(`/api/tasks/get-task/${task_id}`);
@@ -88,7 +88,7 @@ export const deleteTask=createAsyncThunk("task/deleteTask",
     async(taskId)=>{
         setAuthHeader(localStorage.getItem("jwt"),api)
         try{
-            const {data} = await api.delete(`/api/tasks/${taskId}`);
+            const {data} = await api.delete(`/api/tasks/delete-task/${taskId}`);
             console.log("task delete successfully ")
             return taskId;
         }catch(error){
@@ -111,36 +111,36 @@ const taskSlice = createSlice({
     extraReducers:(builder)=>{
         builder
             .addCase(fetchTasks.pending,(state)=>{
-                state.loading=true
-                state.error=null
+                state.loading=true;
+                state.error=null;
             })
             .addCase(fetchTasks.fulfilled,(state,action)=>{
-                state.loading=false
-                state.tasks=action.payload
+                state.loading=false;
+                state.tasks=action.payload;
             })
             .addCase(fetchTasks.rejected,(state,action)=>{
                 state.error=action.error.message;
                 state.loading=false;
             })
             .addCase(fetchUsersTasks.pending,(state)=>{
-                state.loading=true
-                state.error=null
+                state.loading=true;
+                state.error=null;
             })
             .addCase(fetchUsersTasks.fulfilled,(state,action)=>{
-                state.loading=false
-                state.usersTask=action.payload
+                state.loading=false;
+                state.usersTask=action.payload;
             })
             .addCase(fetchUsersTasks.rejected,(state,action)=>{
                 state.error=action.error.message;
                 state.loading=false;
             })
             .addCase(createTask.pending,(state)=>{
-                state.loading=true
-                state.error=null
+                state.loading=true;
+                state.error=null;
             })
             .addCase(createTask.fulfilled,(state,action)=>{
-                state.loading=false
-                state.tasks.push(action.payload)
+                state.loading=false;
+                state.tasks.push(action.payload);
             })
             .addCase(createTask.rejected,(state,action)=>{
                 state.error=action.error.message;
@@ -161,7 +161,6 @@ const taskSlice = createSlice({
                 );
             })
             .addCase(deleteTask.fulfilled,(state,action)=>{
-
                 state.loading=false;
                 state.tasks=state.tasks.filter((task)=>task.id!==action.payload)
             });
