@@ -58,7 +58,7 @@ export const acceptDeclineSubmission=createAsyncThunk("submissions/fetchSubmissi
 
         try{
             const {data}=await api.put(
-                `/api/submissions/${id}?status=${status}`,
+                `/api/submission/acc-dec/${id}?status=${status}`,
                 {}
             );
             console.log("accept task",data)
@@ -93,11 +93,11 @@ const submissionSlice = createSlice({
             })
             .addCase(fetchAllSubmissions.fulfilled, (state,action)=>{
                 state.status='succeeded';
-                state.submissions = action.payload;
+                state.submissions=action.payload;
             })
             .addCase(fetchAllSubmissions.rejected, (state,action)=>{
                 state.status='failed';
-                state.submissions = action.error.message;
+                state.submissions=action.error.message;
             })
             .addCase(fetchSubmissionsByTaskId.fulfilled, (state,action)=>{
                 state.status='succeeded';
