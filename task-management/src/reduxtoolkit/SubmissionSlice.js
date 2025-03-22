@@ -52,7 +52,7 @@ export const fetchSubmissionsByTaskId=createAsyncThunk("submissions/fetchSubmiss
     }
 )
 
-export const acceptDeclineSubmission=createAsyncThunk("submissions/fetchSubmissionsByTaskId",
+export const acceptDeclineSubmission=createAsyncThunk("submissions/acceptDeclineSubmission",
     async({id,status})=>{
         setAuthHeader(localStorage.getItem("jwt",api))
 
