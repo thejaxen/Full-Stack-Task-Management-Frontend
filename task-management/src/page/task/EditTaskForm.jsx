@@ -10,6 +10,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import Typography from "@mui/material/Typography";
 import {Button} from "@mui/material";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import {fetchTasksById} from "../../reduxtoolkit/TaskSlice";
+import {store} from "../../reduxtoolkit/Store";
+import dayjs from 'dayjs';
 
 const style = {
     position: 'absolute',
@@ -25,32 +30,11 @@ const style = {
 
 const tags =["Arge","Fırın","Bakım","Üretim","Kompozit","Depo","Kalite","Poligon","Taşlama","Kesim","İdari Bina Alt Kat","İdari Bina Üst Kat"]
 
-export default function EditTaskForm({handleClose,open}){
+export default function EditTaskForm({ handleClose,open }){
 
-    const handleDeadlineChange=(date)=>{
-        setFormData({
-            ...formData,
-            deadline:date
-        })
-    };
+    const dispatch = useDispatch()
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        let { deadline } = formData;
-        console.log("Raw deadline value before formatting:", deadline);
-        if (typeof deadline === "string") {
-            console.log("Deadline is already formatted:", deadline);
-            formData.deadline = deadline;
-        } else {
-            formData.deadline = formatedDate(deadline);
-        }
-        if (!formData.deadline) {
-            console.error("Invalid formatted deadline!");
-            return;
-        }
-        console.log("Final formatted deadline:", formData.deadline);
-        handleClose();
-    };
+    const {taskDetails} = useSelector(store => store.task)
 
     const [formData,setFormData]=useState({
         title:"",
@@ -73,9 +57,16 @@ export default function EditTaskForm({handleClose,open}){
 
     const handleTagsChange=(event,value)=>{
         setSelectedTags(value);
+    };
+
+    const handleDeadlineChange=(date)=>{
+        setFormData({
+            ...formData,
+            deadline:date
+        })
     }
 
-    const formatedDate=(input)=>{
+    const formateDate=(input)=>{
         let{
             $y: year,
             $M: month,
@@ -83,21 +74,49 @@ export default function EditTaskForm({handleClose,open}){
             $H: hours,
             $m: minutes,
             $s: seconds,
-            $ms: miliseconds,
+            $ms: milliseconds,
         } = input;
 
-        const date = new Date(year,month,day,hours,minutes,seconds,miliseconds)
+        const date = new Date(year,month,day,hours,minutes,seconds,milliseconds)
 
         const formatedDate = date.toISOString();
 
         return formatedDate;
     }
 
-    //Right now I am not using it because
-    //this use effect is for the api, it will get data from api.
-    useEffect(()=>{
+    const handleSubmit = (e) => {
+       e.preventDefault();
+       const {deadline}=formData;
+       formData.deadline=formateDate(deadline);
+       formData.tags=selectedTags;
+       console.log("formData",formData,"deadline : ",formData.deadline)
+        handleClose()
+    }
 
-    },[])
+    const taskId= 603;
+
+    useEffect(() => {
+        dispatch(fetchTasksById(taskId));
+    }, [taskId]);
+
+    useEffect(()=>{
+        if(taskDetails){
+            setFormData({
+                title: taskDetails.title || "",
+                image: taskDetails.image || "",
+                description: taskDetails.description || "",
+                comment: taskDetails.comment || "",
+                deadline: taskDetails.deadline ? dayjs(taskDetails.deadline) : dayjs(new Date()),
+                tags: taskDetails.tags || [],
+            })
+            setSelectedTags(taskDetails.tags || [])
+        }
+    },[taskDetails])
+
+    useEffect(()=>{
+        console.log("taskDetails", taskDetails)
+    },[taskDetails])
+
 
     return(
         <div>
@@ -158,7 +177,7 @@ export default function EditTaskForm({handleClose,open}){
                                     multiple
                                     id="multiple-limit-tags"
                                     options={tags}
-                                    onChange={(event, value) => handleTagsChange(value)}
+                                    onChange={(event, value) => handleTagsChange(event, value)}
                                     getOptionLabel={(option) => option}
                                     renderInput={(params) => (
                                         <TextField {...params} label="Tags" fullWidth />

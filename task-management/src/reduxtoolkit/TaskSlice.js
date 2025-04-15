@@ -53,6 +53,7 @@ export const createTask=createAsyncThunk("task/createTask",
         try{
             const {data} = await api.post("/api/tasks/createTask",taskData)
             console.log("created task: ",data)
+            return data;
         }catch(error){
             console.log("error",error)
             throw Error(error.response.data.error)        }
@@ -65,6 +66,7 @@ export const updateTask=createAsyncThunk("task/updateTask",
         try{
             const {data} = await api.put(`/api/tasks/${id}`,updatedTaskData)
             console.log("updated task: ",data)
+            return data;
         }catch(error){
             console.log("error",error)
             throw Error(error.response.data.error)        }
@@ -77,6 +79,7 @@ export const assignedTaskToUser=createAsyncThunk("task/assignedTaskToUser",
         try{
             const {data} = await api.put(`/api/tasks/${taskId}/user/${userId}/assigned`);
             console.log("assigned task: ",data)
+            return data;
         }catch(error){
             console.log("error",error)
             throw Error(error.response.data.error)
@@ -117,6 +120,10 @@ const taskSlice = createSlice({
             .addCase(fetchTasks.fulfilled,(state,action)=>{
                 state.loading=false;
                 state.tasks=action.payload;
+            })
+            .addCase(fetchTasksById.fulfilled, (state, action) => {
+                state.loading = false;
+                state.taskDetails = action.payload;
             })
             .addCase(fetchTasks.rejected,(state,action)=>{
                 state.error=action.error.message;

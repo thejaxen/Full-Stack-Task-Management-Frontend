@@ -66,8 +66,10 @@ const TaskCard = ({item}) => {
                     </div>
                     <div className='space-y-5'>
                         <div className='space-y-2'>
-                            <h1 className='font-bold text-lg'>{item.title}</h1>
-                            <p className='text-gray-500 text-sm'>{item.description}</p>
+                            <h1 className='font-bold text-lg'>
+                                {item.title}</h1>
+                            <p className='text-gray-500 text-sm'>
+                                {item.description}</p>
                         </div>
                         <div className='flex flex-wrap gap-2 items-center'>
                             {item.tags.map((item)=> <span className='py-1 px-5 rounded-full techStack'>

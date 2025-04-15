@@ -11,7 +11,6 @@ import Typography from "@mui/material/Typography";
 import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { createTask } from "../../reduxtoolkit/TaskSlice";
-import dayjs from 'dayjs';
 
 const style = {
     position: 'absolute',
@@ -44,10 +43,10 @@ export default function CreateNewTaskForm({ handleClose, open }) {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
+        setFormData({
+            ...formData,
             [name]: value,
-        }));
+        });
     };
 
     const handleTagsChange = (event, value) => {
@@ -61,7 +60,7 @@ export default function CreateNewTaskForm({ handleClose, open }) {
         })
     }
 
-    const formateDate=()=>{
+    const formateDate=(input)=>{
         let{
             $y: year,
             $M: month,
@@ -69,32 +68,27 @@ export default function CreateNewTaskForm({ handleClose, open }) {
             $H: hours,
             $m: minutes,
             $s: seconds,
-            $ms: miliseconds,
+            $ms: milliseconds,
         } = input;
 
-        const date = new Date (year,month,day,hours,minutes,seconds,miliseconds);
+        const date = new Date(year, month, day, hours, minutes, seconds, milliseconds);
 
-        const formatedDate=date.toISOString();
+        const formatedDate = date.toISOString();
 
         return formatedDate;
     }
 
-
-    const formatedDate=date.toISOString();
-
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Validation: Image ve Tags boşsa işlem yapma
-        if (!formData.image.trim()) {
-            alert("Task must have an image!"); // Uyarı ver
-            return;
-        }
-        if (selectedTags.length === 0) {
-            alert("Task must have at least one tag!"); // Uyarı ver
-            return;
-        }
+        const {deadline} = formData;
 
+        formData.deadline=formateDate(deadline);
+
+        formData.tags=selectedTags
+        dispatch(createTask(formData));
+        console.log("formData",formData,"deadline : ",formData.deadline)
+        handleClose();
     };
 
     return (
@@ -178,7 +172,7 @@ export default function CreateNewTaskForm({ handleClose, open }) {
                                 className="customButton"
                                 type="submit"
                                 sx={{ padding: ".9rem" }}
-                                disabled={!formData.image.trim() || selectedTags.length === 0} // Eğer image veya tags yoksa butonu pasif yap
+                                disabled={!formData.image.trim() || selectedTags.length === 0}
                             >
                                 Create
                             </Button>
