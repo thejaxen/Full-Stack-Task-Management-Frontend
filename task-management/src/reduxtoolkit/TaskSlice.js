@@ -64,7 +64,7 @@ export const updateTask=createAsyncThunk("task/updateTask",
     async({id,updatedTaskData})=>{
         setAuthHeader(localStorage.getItem("jwt"),api)
         try{
-            const {data} = await api.put(`/api/tasks/${id}`,updatedTaskData)
+            const {data} = await api.put(`/api/tasks/update/${id}`,updatedTaskData)
             console.log("updated task: ",data)
             return data;
         }catch(error){
@@ -107,7 +107,7 @@ const taskSlice = createSlice({
         tasks:[],
         loading:false,
         error:null,
-        taskDetails:null,
+        taskDetailsById:{},
         usersTask:[]
     },
     reducer:{},
@@ -121,10 +121,6 @@ const taskSlice = createSlice({
                 state.loading=false;
                 state.tasks=action.payload;
             })
-            .addCase(fetchTasksById.fulfilled, (state, action) => {
-                state.loading = false;
-                state.taskDetails = action.payload;
-            })
             .addCase(fetchTasks.rejected,(state,action)=>{
                 state.error=action.error.message;
                 state.loading=false;
@@ -136,6 +132,11 @@ const taskSlice = createSlice({
             .addCase(fetchUsersTasks.fulfilled,(state,action)=>{
                 state.loading=false;
                 state.usersTask=action.payload;
+            })
+            .addCase(fetchTasksById.fulfilled,(state,action)=>{
+                state.loading=false;
+                const task = action.payload;
+                state.taskDetailsById[task.id] = task;
             })
             .addCase(fetchUsersTasks.rejected,(state,action)=>{
                 state.error=action.error.message;

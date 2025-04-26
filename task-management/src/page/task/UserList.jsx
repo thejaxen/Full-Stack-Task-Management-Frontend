@@ -9,6 +9,8 @@ import Logo from "./../../logo.svg"
 import {Avatar} from '@mui/material'
 import {ListItemText} from "@mui/material";
 import {Divider} from "@mui/material";
+import {useDispatch} from "react-redux";
+import {useEffect} from "react";
 
 const style = {
     position: 'absolute',
@@ -25,6 +27,13 @@ const style = {
 const tasks = [1,1,1,1]
 
 export default function UserList({handleClose,open}) {
+
+    const dispatch=useDispatch();
+
+    useEffect((item)=>{
+
+    })
+
     return (
         <div>
             <Modal
