@@ -11,6 +11,9 @@ import {ListItemText} from "@mui/material";
 import {Divider} from "@mui/material";
 import {useDispatch} from "react-redux";
 import {useEffect} from "react";
+import {getUserList} from "../../reduxtoolkit/AuthSlice";
+import {useSelector} from "react-redux";
+import { List } from '@mui/material'
 
 const style = {
     position: 'absolute',
@@ -27,46 +30,41 @@ const style = {
 const tasks = [1,1,1,1]
 
 export default function UserList({handleClose,open}) {
+    const dispatch = useDispatch();
+    const {auth} = useSelector(store=>store);
 
-    const dispatch=useDispatch();
-
-    useEffect((item)=>{
-
-    })
-
+    useEffect((item) => {
+        dispatch(getUserList(localStorage.getItem("jwt")))
+    }, []);
+    
     return (
-        <div>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box sx={style}>
-                    {
-                    tasks.map((item,index)=>
-                        <>
-                        <div className='flex items-center justify-between w-full'>
-                        <ListItem>
-                            <ListItemAvatar>
-                                <Avatar src={Logo}></Avatar>
-                            </ListItemAvatar>
-                            <ListItemText
-                                secondary="Mert Duyar"
-                                primary={"Kim Teknoloji"}
-                            >
-                            </ListItemText>
-                        </ListItem>
-                        <div>
-                            <Button className='customButton'>Select</Button>
-                        </div>
-                    </div>
-                            {index!== tasks.length-1 && <Divider variant='inset' />}
-                        </>
-                        )
-                    }
-                </Box>
-            </Modal>
-        </div>
+        <Modal open={open} onClose={handleClose}>
+            <Box sx={style}>
+                <Typography variant="h6" mb={2}>User List</Typography>
+                <List>
+                    {auth.users?.length > 0 ? (
+                        auth.users.map((item, index) => (
+                            <React.Fragment key={item.id || index}>
+                                <Box display="flex" alignItems="center" justifyContent="space-between" width="100%">
+                                    <ListItem disableGutters>
+                                        <ListItemAvatar>
+                                            <Avatar src={Logo} />
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            primary={item.fullName}
+                                            secondary={`@${item.fullName.split(" ").join("_").toLowerCase()}`}
+                                        />
+                                    </ListItem>
+                                    <Button className='customButton'>Select</Button>
+                                </Box>
+                                {index !== auth.users.length - 1 && <Divider variant="inset" />}
+                            </React.Fragment>
+                        ))
+                    ) : (
+                        <Typography textAlign="center" mt={2}>No users found.</Typography>
+                    )}
+                </List>
+            </Box>
+        </Modal>
     );
 }
