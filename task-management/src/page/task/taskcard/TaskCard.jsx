@@ -5,14 +5,19 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import UserList from "../UserList";
 import SubmissionList from "../SubmissionList";
 import EditTaskCard from "../EditTaskForm";
-import {dispatch, useDispatch} from "react-redux";
+import {useDispatch} from "react-redux";
 import {deleteTask} from "../../../reduxtoolkit/TaskSlice";
-
+import {useLocation} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 const role="ROLE_ADMIN"
 
 const TaskCard = ({item}) => {
 
     const dispatch = useDispatch();
+
+    const location = useLocation()
+
+    const navigate = useNavigate()
 
     const [anchorEl,setAnchorEl] = React.useState(null);
 
@@ -33,8 +38,20 @@ const TaskCard = ({item}) => {
         handleMenuClose();
     };
 
+    const handleRemoveTaskIdParams=()=>{
+        const updatedParams= new URLSearchParams(location.search)
+        updatedParams.delete("filter")
+                const queryString = updatedParams.toString();
+                const updatedPath = queryString?`${location.pathname}?${queryString}`
+                    :location.pathname;
+                navigate(updatedPath);
+    }
+
     const handleOpenUpdateTaskModel=()=>{
+        const updatedParams= new URLSearchParams(location.search)
         setOpenUpdateTaskForm(true);
+        updatedParams.set("taskId",item.id);
+        navigate(`${location.pathname}?${updatedParams.toString()}`)
         handleMenuClose();
     };
 
@@ -66,8 +83,10 @@ const TaskCard = ({item}) => {
                     </div>
                     <div className='space-y-5'>
                         <div className='space-y-2'>
-                            <h1 className='font-bold text-lg'>{item.title}</h1>
-                            <p className='text-gray-500 text-sm'>{item.description}</p>
+                            <h1 className='font-bold text-lg'>
+                                {item.title}</h1>
+                            <p className='text-gray-500 text-sm'>
+                                {item.description}</p>
                         </div>
                         <div className='flex flex-wrap gap-2 items-center'>
                             {item.tags.map((item)=> <span className='py-1 px-5 rounded-full techStack'>
@@ -108,7 +127,7 @@ const TaskCard = ({item}) => {
             </div>
             <UserList open={openUserList} handleClose={handleCloseUserList}/>
             <SubmissionList open={openSubmissionList} handleClose={handleCloseSubmissionList}/>
-            <EditTaskCard open={openUpdateTaskForm} handleClose={handleCloseUpdateTaskForm}/>
+            <EditTaskCard item={item} open={openUpdateTaskForm} handleClose={handleCloseUpdateTaskForm}/>
         </div>
     )
 }
